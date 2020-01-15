@@ -1,4 +1,6 @@
-FROM golang:1.13-alpine AS go-builder
+# All credit goes to Yves Blusseau, Nicolas Duchon, and all the contributors of the original Github repository
+
+FROM golang:1.11-alpine AS go-builder
 
 ENV DOCKER_GEN_VERSION=0.7.4
 
@@ -17,9 +19,9 @@ RUN go get github.com/jwilder/docker-gen \
     && make get-deps \
     && make all
 
-FROM alpine:3.10
+FROM balenalib/raspberrypi3-alpine:3.11
 
-LABEL maintainer="Yves Blusseau <90z7oey02@sneakemail.com> (@blusseau)"
+LABEL maintainer="Alexander Krause <akr@informatik.uni-kiel.de>"
 
 ENV DEBUG=false \
     DOCKER_HOST=unix:///var/run/docker.sock
@@ -50,3 +52,5 @@ WORKDIR /app
 
 ENTRYPOINT [ "/bin/bash", "/app/entrypoint.sh" ]
 CMD [ "/bin/bash", "/app/start.sh" ]
+
+
